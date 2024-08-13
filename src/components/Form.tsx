@@ -12,6 +12,7 @@ import {
 } from '@/components/ui';
 import { FormField } from '@/components';
 import { formSchema, FormSchema } from '@/entities';
+import { formatDocument, formatZipCode } from '@/utils';
 
 export const Form = () => {
   const {
@@ -71,12 +72,19 @@ export const Form = () => {
           <FormField
             placeholder="Digite seu CPF"
             error={errors.document?.message}
-            {...register('document')}
+            maxLength={14}
+            {...register('document', {
+              onChange: (e) =>
+                (e.target.value = formatDocument(e.target.value)),
+            })}
           />
           <FormField
             placeholder="Digite seu CEP"
             error={errors?.zipCode?.message}
-            {...register('zipCode')}
+            maxLength={9}
+            {...register('zipCode', {
+              onChange: (e) => (e.target.value = formatZipCode(e.target.value)),
+            })}
           />
           <FormField
             placeholder="Logradouro"
