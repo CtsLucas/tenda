@@ -131,18 +131,21 @@ export const Form = () => {
             })}
           />
           <FormField
+            className="truncate"
             placeholder="Logradouro"
             error={errors?.street?.message}
             {...register('street')}
             disabled
           />
           <FormField
+            className="truncate"
             placeholder="Bairro"
             error={errors?.neighborhood?.message}
             {...register('neighborhood')}
             disabled
           />
           <FormField
+            className="truncate"
             placeholder="Localidade"
             error={errors?.state?.message}
             {...register('state')}
