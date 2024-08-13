@@ -10,8 +10,11 @@ export const formSchema = z.object({
     .min(1, 'O sobrenome é obrigatório')
     .max(50, 'O sobrenome deve conter no máximo 50 caracteres'),
   email: z.string().email('Digite um e-mail válido!'),
-  document: z.string().min(1, 'O CPF é obrigatório'),
-  zipCode: z.string().min(1, 'O CEP é obrigatório'),
+  document: z.string().min(1, 'O CPF é obrigatório').min(14, 'Digite um CPF válido'),
+  zipCode: z
+    .string()
+    .min(1, 'O CEP é obrigatório')
+    .min(9, 'Digite um CEP válido'),
   street: z.string({
     message: 'A rua é obrigatório',
   }),

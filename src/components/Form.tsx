@@ -109,23 +109,20 @@ export const Form = () => {
           <FormField
             placeholder="Logradouro"
             error={errors?.street?.message}
-            {...register('street', {
-              disabled: true,
-            })}
+            {...register('street')}
+            disabled
           />
           <FormField
             placeholder="Bairro"
             error={errors?.neighborhood?.message}
-            {...register('neighborhood', {
-              disabled: true,
-            })}
+            {...register('neighborhood')}
+            disabled
           />
           <FormField
             placeholder="Localidade"
             error={errors?.state?.message}
-            {...register('state', {
-              disabled: true,
-            })}
+            {...register('state')}
+            disabled
           />
         </CardContent>
 
