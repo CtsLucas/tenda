@@ -10,8 +10,8 @@ import {
   CardFooter,
   Button,
 } from '@/components/ui';
+import { FormField } from '@/components';
 import { formSchema, FormSchema } from '@/entities';
-import { FormField } from './FormField';
 
 export const Form = () => {
   const {
