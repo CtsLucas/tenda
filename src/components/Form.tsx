@@ -1,5 +1,8 @@
+import { useCallback } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 import {
   Card,
@@ -9,11 +12,10 @@ import {
   CardContent,
   CardFooter,
   Button,
-} from '@/components/ui';
-import { FormField } from '@/components';
+  FormField,
+} from '@/components';
 import { formSchema, FormSchema, IAddressMapper } from '@/entities';
-import { formatDocument, formatZipCode } from '@/utils';
-import { useCallback } from 'react';
+import { formatDocument, formatZipCode, delay } from '@/utils';
 import { useAddress } from '@/hooks/use-address';
 
 export const Form = () => {
@@ -25,11 +27,10 @@ export const Form = () => {
     setValue,
     clearErrors,
     setError,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid, isSubmitted },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
   });
-
   const zipCodeWatch = watch('zipCode');
 
   const { data: addressData } = useAddress({ zipCode: zipCodeWatch });
@@ -43,25 +44,33 @@ export const Form = () => {
           }
         });
 
-        clearErrors(['zipCode', 'street', 'neighborhood', 'state']);
+        return clearErrors(['zipCode', 'street', 'neighborhood', 'state']);
       } else {
-        setError('zipCode', {
-          message: 'Digite um CEP válido!',
+        Object.entries(addressData).forEach(([key, value]) => {
+          if (key in addressData && key !== 'zipCode') {
+            setValue(key as keyof Omit<IAddressMapper, 'error'>, value);
+          }
         });
 
-        Object.entries(addressData).forEach(([key]) => {
-          if (key in addressData && key !== 'zipCode') {
-            setValue(key as keyof Omit<IAddressMapper, 'error'>, '');
-          }
+        return setError('zipCode', {
+          message: 'Digite um CEP válido!',
         });
       }
     }
   }, [addressData, setValue, clearErrors, setError]);
 
-  const handleSubmit = hookFormSubmit((data) => {
+  const handleSubmit = hookFormSubmit(async (data) => {
+    await delay();
+
     try {
+      toast.success(
+        'Formulário enviado com sucesso! Confira o resultado no console do navegador!',
+      );
       console.log(data);
     } catch (error) {
+      toast.error(
+        'Ocorreu um erro no envio do formuláio, tente novamente mais tarde!',
+      );
       console.error(error);
     }
   });
@@ -142,10 +151,25 @@ export const Form = () => {
         </CardContent>
 
         <CardFooter className="justify-end gap-3">
-          <Button type="button" variant="secondary" onClick={handleClearForm}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleClearForm}
+            disabled={isSubmitting}
+          >
             Limpar
           </Button>
-          <Button onClick={handleSubmit}>Enviar</Button>
+          <Button
+            className="w-20"
+            onClick={handleSubmit}
+            disabled={isSubmitting || (!isValid && isSubmitted)}
+          >
+            {isSubmitting ? (
+              <Loader2 className="mr-2 size-4 animate-spin" />
+            ) : (
+              'Enviar'
+            )}
+          </Button>
         </CardFooter>
       </form>
     </Card>
