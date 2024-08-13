@@ -1,4 +1,4 @@
-export function formatDocument(document: string) {
+export function formatDocument(document: string): string {
   return document
     .replace(/\D/g, '')
     .replace(/(\d{3})(\d)/, '$1.$2')

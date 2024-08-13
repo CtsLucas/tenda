@@ -7,7 +7,7 @@ type IUseAddress = IAddressParams;
 
 const useAddress = ({ zipCode }: IUseAddress) => {
   return useQuery({
-    enabled: !!zipCode && zipCode.length === 9,
+    enabled: !!zipCode && zipCode.length >= 8,
     queryKey: [zipCode],
     staleTime: Infinity,
     queryFn: () => addressService({ zipCode }),

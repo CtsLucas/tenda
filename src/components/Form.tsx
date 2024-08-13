@@ -11,18 +11,37 @@ import {
   Button,
 } from '@/components/ui';
 import { FormField } from '@/components';
-import { formSchema, FormSchema } from '@/entities';
+import { formSchema, FormSchema, IAddressMapper } from '@/entities';
 import { formatDocument, formatZipCode } from '@/utils';
+import { useCallback } from 'react';
+import { useAddress } from '@/hooks/use-address';
 
 export const Form = () => {
   const {
     handleSubmit: hookFormSubmit,
     register,
     reset,
+    watch,
+    setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
   });
+
+  const zipCodeWatch = watch('zipCode');
+
+  const { data: addressData } = useAddress({ zipCode: zipCodeWatch });
+
+  const handleZipCodeOnBlur = useCallback(() => {
+    if (addressData) {
+      Object.entries(addressData).forEach(([name, value]) =>
+        setValue(name as keyof IAddressMapper, value),
+      );
+
+      clearErrors(['street', 'neighborhood', 'state']);
+    }
+  }, [addressData, setValue, clearErrors]);
 
   const handleSubmit = hookFormSubmit((data) => {
     try {
@@ -84,6 +103,7 @@ export const Form = () => {
             maxLength={9}
             {...register('zipCode', {
               onChange: (e) => (e.target.value = formatZipCode(e.target.value)),
+              onBlur: handleZipCodeOnBlur,
             })}
           />
           <FormField
