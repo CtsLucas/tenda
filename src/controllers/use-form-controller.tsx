@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -22,7 +22,7 @@ export const useFormController = () => {
   });
   const zipCodeWatch = watch('zipCode');
 
-  const { data: addressData } = useAddress({ zipCode: zipCodeWatch });
+  const { data: addressData, isError } = useAddress({ zipCode: zipCodeWatch });
 
   const handleZipCodeOnBlur = useCallback(() => {
     if (addressData) {
@@ -47,6 +47,14 @@ export const useFormController = () => {
       }
     }
   }, [addressData, setValue, clearErrors, setError]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(
+        'O serviço de busca de endereço está temporariamente indisponível. Tente novamente mais tarde.',
+      );
+    }
+  }, [isError]);
 
   const handleClearForm = () => {
     reset({
@@ -82,9 +90,10 @@ export const useFormController = () => {
     handleClearForm,
     handleZipCodeOnBlur,
     register,
-    errors,
+    formErrors: errors,
     isSubmitting,
     isValid,
     isSubmitted,
+    isError,
   };
 };
