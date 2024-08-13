@@ -21,7 +21,7 @@ export const formSchema = z
       .min(1, 'O CEP é obrigatório')
       .refine(isValidZipCode, 'Digite um CEP válido!'),
     street: z.string({
-      message: 'A rua é obrigatório',
+      message: 'O logradouro é obrigatório',
     }),
     neighborhood: z.string({
       message: 'O bairro é obrigatório',

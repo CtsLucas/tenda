@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { IAddressParams } from '@/entities';
-import { addressService } from '@/services/address-service';
+import { addressService } from '@/services';
 
 type IUseAddress = IAddressParams;
 
