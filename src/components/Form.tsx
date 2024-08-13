@@ -1,17 +1,17 @@
 import { Loader2 } from 'lucide-react';
 
 import {
+  Button,
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-  Button,
   FormField,
 } from '@/components';
-import { formatDocument, formatZipCode } from '@/utils';
 import { useFormController } from '@/controllers';
+import { formatDocument, formatZipCode } from '@/utils';
 
 export const Form = () => {
   const {

@@ -1,5 +1,6 @@
-import { isValidDocument, isValidZipCode } from '@/utils';
 import { z } from 'zod';
+
+import { isValidDocument, isValidZipCode } from '@/utils';
 
 export const formSchema = z
   .object({

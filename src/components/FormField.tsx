@@ -1,7 +1,7 @@
-import React from 'react';
 import { ShieldAlert } from 'lucide-react';
+import React from 'react';
 
-import { Input, InputProps } from '@/components/ui';
+import { Input, InputProps } from '@/components';
 
 interface IFormFieldProps extends InputProps {
   error?: string;
