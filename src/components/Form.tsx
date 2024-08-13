@@ -24,6 +24,7 @@ export const Form = () => {
     watch,
     setValue,
     clearErrors,
+    setError,
     formState: { errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -35,13 +36,27 @@ export const Form = () => {
 
   const handleZipCodeOnBlur = useCallback(() => {
     if (addressData) {
-      Object.entries(addressData).forEach(([name, value]) =>
-        setValue(name as keyof IAddressMapper, value),
-      );
+      if (!addressData.error) {
+        Object.entries(addressData).forEach(([key, value]) => {
+          if (key in addressData) {
+            setValue(key as keyof Omit<IAddressMapper, 'error'>, value);
+          }
+        });
 
-      clearErrors(['street', 'neighborhood', 'state']);
+        clearErrors(['zipCode', 'street', 'neighborhood', 'state']);
+      } else {
+        setError('zipCode', {
+          message: 'Digite um CEP válido!',
+        });
+
+        Object.entries(addressData).forEach(([key]) => {
+          if (key in addressData && key !== 'zipCode') {
+            setValue(key as keyof Omit<IAddressMapper, 'error'>, '');
+          }
+        });
+      }
     }
-  }, [addressData, setValue, clearErrors]);
+  }, [addressData, setValue, clearErrors, setError]);
 
   const handleSubmit = hookFormSubmit((data) => {
     try {

@@ -1,3 +1,4 @@
+import { isValidDocument, isValidZipCode } from '@/utils';
 import { z } from 'zod';
 
 export const formSchema = z.object({
@@ -10,11 +11,14 @@ export const formSchema = z.object({
     .min(1, 'O sobrenome é obrigatório')
     .max(50, 'O sobrenome deve conter no máximo 50 caracteres'),
   email: z.string().email('Digite um e-mail válido!'),
-  document: z.string().min(1, 'O CPF é obrigatório').min(14, 'Digite um CPF válido'),
+  document: z
+    .string()
+    .min(1, 'O CPF é obrigatório')
+    .refine(isValidDocument, 'Digite um CPF válido!'),
   zipCode: z
     .string()
     .min(1, 'O CEP é obrigatório')
-    .min(9, 'Digite um CEP válido'),
+    .refine(isValidZipCode, 'Digite um CEP válido!'),
   street: z.string({
     message: 'A rua é obrigatório',
   }),

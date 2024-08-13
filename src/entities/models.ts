@@ -16,9 +16,14 @@ export interface IAddressResponse {
   siafi: string;
 }
 
+export interface IAddressResponseError {
+  erro: string;
+}
+
 export interface IAddressMapper {
   zipCode: string;
   street: string;
   neighborhood: string;
   state: string;
+  error?: boolean | null;
 }
